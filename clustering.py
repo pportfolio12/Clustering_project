@@ -3,35 +3,43 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 warnings.filterwarnings("ignore")
-dataset = pd.read_csv("climatedata.csv")
-dataset.fillna(0)
-columns = []
-for i in dataset.columns:
-    columns.append(i)
-print(columns)
-dataset = dataset.dropna()
-dataset.replace([np.inf, -np.inf], np.nan, inplace=True)
-X = dataset[['1993 [YR1993]', '1994 [YR1994]', '1995 [YR1995]', '1996 [YR1996]', '1997 [YR1997]', 
-            '1998 [YR1998]', '1999 [YR1999]', '2000 [YR2000]', '2001 [YR2001]', '2002 [YR2002]', 
-            '2003 [YR2003]', '2004 [YR2004]', '2005 [YR2005]', '2006 [YR2006]', '2007 [YR2007]', 
-            '2008 [YR2008]', '2009 [YR2009]', '2010 [YR2010]', '2011 [YR2011]', '2012 [YR2012]', 
-            '2013 [YR2013]', '2014 [YR2014]', '2015 [YR2015]','2016 [YR2016]', '2017 [YR2017]', 
-            '2018 [YR2018]', '2019 [YR2019]', '2020 [YR2020]', '2021 [YR2021]']]
-Y = dataset['2022 [YR2022]']
-X = np.array(X)
-from sklearn.cluster import KMeans
-wcss_list= []
-for i in range(1, 11):
-    kmeans = KMeans(n_clusters=i, init='k-means++', random_state= 42)  
-    kmeans.fit(X)  
-    wcss_list.append(kmeans.inertia_)  
-plt.plot(range(1, 11), wcss_list)  
-plt.title('The Elobw Method Graph')  
-plt.xlabel('Number of clusters(k)')  
-plt.ylabel('wcss_list')  
-plt.show()
-plt.scatter(X[y_predict == 0, 0], X[y_predict == 0, 1], s = 100, c = 'blue', label = 'Cluster 1') #for first cluster  
-plt.scatter(X[y_predict == 1, 0], X[y_predict == 1, 1], s = 100, c = 'green', label = 'Cluster 2') #for second cluster
+
+def load_data():
+    dataset = pd.read_csv("climatedata.csv")
+    dataset.fillna(0)
+    columns = []
+    for i in dataset.columns:
+        columns.append(i)
+    print(columns)
+    dataset = dataset.dropna()
+    dataset.replace([np.inf, -np.inf], np.nan, inplace=True)
+    return  dataset;
+
+dataset = load_data()
+
+def clusters():
+
+    X = dataset[['1993 [YR1993]', '1994 [YR1994]', '1995 [YR1995]', '1996 [YR1996]', '1997 [YR1997]',
+                '1998 [YR1998]', '1999 [YR1999]', '2000 [YR2000]', '2001 [YR2001]', '2002 [YR2002]',
+                '2003 [YR2003]', '2004 [YR2004]', '2005 [YR2005]', '2006 [YR2006]', '2007 [YR2007]',
+                '2008 [YR2008]', '2009 [YR2009]', '2010 [YR2010]', '2011 [YR2011]', '2012 [YR2012]',
+                '2013 [YR2013]', '2014 [YR2014]', '2015 [YR2015]','2016 [YR2016]', '2017 [YR2017]',
+                '2018 [YR2018]', '2019 [YR2019]', '2020 [YR2020]', '2021 [YR2021]']]
+    Y = dataset['2022 [YR2022]']
+    X = np.array(X)
+    from sklearn.cluster import KMeans
+    wcss_list= []
+    for i in range(1, 11):
+        kmeans = KMeans(n_clusters=i, init='k-means++', random_state= 42)
+        kmeans.fit(X)
+        wcss_list.append(kmeans.inertia_)
+    plt.plot(range(1, 11), wcss_list)
+    plt.title('The Elobw Method Graph')
+    plt.xlabel('Number of clusters(k)')
+    plt.ylabel('wcss_list')
+    plt.show()
+    plt.scatter(X[y_predict == 0, 0], X[y_predict == 0, 1], s = 100, c = 'blue', label = 'Cluster 1') #for first cluster
+    plt.scatter(X[y_predict == 1, 0], X[y_predict == 1, 1], s = 100, c = 'green', label = 'Cluster 2') #for second cluster
 def exponential(x, a, b):
     return a*np.exp(b*x)
 def adjR(x, y, degree):
